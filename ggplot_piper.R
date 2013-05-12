@@ -1,5 +1,5 @@
 ### A piper diagram based on the ternary plot example here: http://srmulcahy.github.io/2012/12/04/ternary-plots-r.html
-### This was written quickly, and most likely contains bugs - I advice you to check it first.
+### This was written quickly, and most likely contains bugs - I advise you to check it first.
 ### Jason Lessels jlessels@gmail.com
 
 
