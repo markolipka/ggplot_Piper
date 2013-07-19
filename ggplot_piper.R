@@ -137,3 +137,7 @@ ggplot_piper(Ca=data$Ca, Mg = data$Mg, Cl=data$Cl, SO4= data$SO4, shape=as.facto
 ### Now add better labels to the legend - and a title.
 ggplot_piper(Ca=data$Ca, Mg = data$Mg, Cl=data$Cl, SO4= data$SO4, shape=as.factor(data$WaterType), colour=as.factor(data$WaterType)) + 
   labs(shape="Water type 1", colour="Water type 2") + ggtitle("A piper diagram example")
+## Change colours and shapes and mergingthe legends together
+ggplot_piper(Ca=data$Ca, Mg = data$Mg, Cl=data$Cl, SO4= data$SO4, shape=as.factor(data$WaterType), colour =as.factor(data$WaterType))  + 
+  scale_colour_manual(name="legend name must be the same", values=c("#999999", "#E69F00", "#56B4E9"), labels=c("Control", "Treatment 1", "Treatment 2")) +
+  scale_shape_manual(name="legend name must be the same", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2"))
