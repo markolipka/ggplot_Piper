@@ -46,7 +46,7 @@ ggplot_piper <- function() {
   grid2p3$x2 <- grid2p3$x2+120
   grid3p1 <<- data.frame(x1=c(100,90, 80, 70),y1=c(34.6412, 51.9618, 69.2824, 86.603), x2=c(150, 140, 130, 120), y2=c(121.2442,138.5648,155.8854,173.2060))
   grid3p2 <<- data.frame(x1=c(70, 80, 90, 100),y1=c(121.2442,138.5648,155.8854,173.2060), x2=c(120, 130, 140, 150), y2=c(34.6412, 51.9618, 69.2824, 86.603))
-
+  
   p <- ggplot() +
     ## left hand ternary plot
     geom_segment(aes(x=0,y=0, xend=100, yend=0)) +
@@ -72,16 +72,23 @@ ggplot_piper <- function() {
     geom_segment(aes(x=x1, y=y1, yend=y2, xend=x2), data=grid3p2, linetype = "dashed", size = 0.25, colour = "grey50") +
     ### Labels and grid values
     #geom_text(aes(50,-10, label="Ca^2"), parse=T, size=4) + # Commented out, as parse=TRUE can cause issues
-    geom_text(aes(50,-10, label="Ca2"), size=4) +
+
     geom_text(aes(c(20,40,60,80),c(-5,-5,-5,-5), label=c(80, 60, 40, 20)), size=3) +
     geom_text(aes(c(35,25,15,5),grid1p2$y2, label=c(80, 60, 40, 20)), size=3) +
     geom_text(aes(c(95,85,75,65),grid1p3$y2, label=c(80, 60, 40, 20)), size=3) +
     # geom_text(aes(17,50, label="Mg^2"), parse=T, angle=60, size=4) +
-    geom_text(aes(17,50, label="Mg2"), angle=60, size=4) +
+    coord_equal(ratio=1)+  
+    geom_text(aes(17,50, label="Mg^2"), angle=60, size=4, parse=TRUE) +  
     geom_text(aes(82.5,50, label="Na + K"), angle=-60, size=4) +
-    geom_text(aes(170,-10, label="Cl-"), size=4) +
-    geom_text(aes(205,50, label="SO4"), angle=-60, size=4) +
-    geom_text(aes(137.5,50, label="Alkalinity as HCO3"), angle=60, size=4) +
+   geom_text(aes(50,-10, label="Ca^2"), size=4, parse=TRUE) +
+    
+    
+    geom_text(aes(170,-10, label="Cl^-phantom()"), size=4, parse=TRUE) +
+    geom_text(aes(205,50, label="SO^4"), angle=-60, size=4, parse=TRUE) +
+    geom_text(aes(137.5,50, label="Alkalinity~as~HCO^3"), angle=60, size=4, parse=TRUE) +
+    geom_text(aes(72.5,150, label="SO^4~+~Cl^-phantom()"), angle=60, size=4, parse=TRUE) +
+    geom_text(aes(147.5,150, label="Ca^2~+~Mg^2"), angle=-60, size=4, parse=TRUE) + 
+
     geom_text(aes(c(155,145,135,125),grid2p2$y2, label=c(20, 40, 60, 80)), size=3) +
     geom_text(aes(c(215,205,195,185),grid2p3$y2, label=c(20, 40, 60, 80)), size=3) +
     geom_text(aes(c(140,160,180,200),c(-5,-5,-5,-5), label=c(20, 40, 60, 80)), size=3) +
@@ -89,8 +96,6 @@ ggplot_piper <- function() {
     geom_text(aes(grid3p1$x2+5,grid3p1$y2, label=c(20, 40, 60, 80)), size=3) +
     geom_text(aes(grid3p2$x1-5,grid3p2$y1, label=c(20, 40, 60, 80)), size=3) +
     geom_text(aes(grid3p2$x2+5,grid3p2$y2, label=c(80, 60, 40, 20)), size=3) +
-    geom_text(aes(72.5,150, label="SO4 + Cl-"), angle=60, size=4) +
-    geom_text(aes(147.5,150, label="Ca2 + Mg2"), angle=-60, size=4) +
     theme_bw() +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.border = element_blank(), axis.ticks = element_blank(),
@@ -98,7 +103,6 @@ ggplot_piper <- function() {
           axis.title.x = element_blank(), axis.title.y = element_blank())
   return(p)
 }
-
 ### A plan and simple piper diagram
 data=as.data.frame(list("Ca"=c(43,10,73,26,32),"Mg"=c(30,50,3,14,12),Cl=c(24,10,12,30,43),"SO4"=c(24,10,12,30,43),"WaterType"=c(2,2,1,2,3)),row.names=c("A","B","C","D","E"))
 #transform the data into piper based coordinates
