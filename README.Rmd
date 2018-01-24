@@ -1,0 +1,20 @@
+---
+title: "ggplot Piper Diagram"
+author: "Marko Lipka"
+date: "January 24, 2018"
+output: github_document
+---
+
+# Example
+
+```{r}
+source("ggplot_piper.R")
+
+data
+piper_data
+
+ggplot_piper() + geom_point(aes(x,y, colour=factor(observation), shape=factor(observation)), size=4, data=piper_data) + 
+  scale_colour_manual(name="legend name must be the same", values=c("#999999", "#E69F00", "#56B4E9"), labels=c("Control", "Treatment 1", "Treatment 2")) +
+  scale_shape_manual(name="legend name must be the same", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2"))
+```
+
