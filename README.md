@@ -2,7 +2,7 @@ ggplot Piper Diagram
 ================
 January 24, 2018
 
-**This is a fork of the gist <https://gist.github.com/markolipka/110260338490d26f8e911ff9a8cc1aea> (by Jason Lessels, <jlessels@gmail.com>).** Forking a gist into a git-repository unfortunatenly does not preserve the relation to the forked project, sorry for that.
+**This is a fork of the gist <https://gist.github.com/johnDorian/5561272> (by Jason Lessels, <jlessels@gmail.com>).** Forking a gist into a git-repository unfortunatenly does not preserve the relation to the forked project, sorry for that.
 
 Jasons comments:
 
