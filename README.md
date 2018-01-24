@@ -8,7 +8,15 @@ Example
 
 ``` r
 source("ggplot_piper.R")
+```
 
+``` r
+data <- as.data.frame(list("Ca"  = c(43, 10, 73, 26, 32),
+                        "Mg"  = c(30, 50, 3, 14, 12),
+                        "Cl"  = c(24, 10, 12, 30, 43),
+                        "SO4" = c(24, 10, 12, 30, 43),
+                        "WaterType" = c(2, 2, 1, 2, 3)),
+                   row.names = c("A", "B", "C", "D", "E"))
 data
 ```
 
@@ -20,6 +28,12 @@ data
     ## E 32 12 43  43         3
 
 ``` r
+piper_data <- transform_piper_data(Ca = data$Ca,
+                                   Mg = data$Mg,
+                                   Cl = data$Cl,
+                                   SO4 = data$SO4,
+                                   name = data$WaterType)
+
 piper_data
 ```
 
@@ -41,9 +55,14 @@ piper_data
     ## 15           3 131.0 129.90450
 
 ``` r
-ggplot_piper() + geom_point(aes(x,y, colour=factor(observation), shape=factor(observation)), size=4, data=piper_data) + 
-  scale_colour_manual(name="legend name must be the same", values=c("#999999", "#E69F00", "#56B4E9"), labels=c("Control", "Treatment 1", "Treatment 2")) +
-  scale_shape_manual(name="legend name must be the same", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2"))
+ggplot_piper() + 
+  geom_point(aes(x, y,
+                 colour = factor(observation),
+                 shape  = factor(observation)), 
+             size=4, data = piper_data) + 
+  scale_colour_manual(name="legend name", values=c("#999999", "#E69F00", "#56B4E9"), labels=c("Control", "Treatment 1", "Treatment 2")) +
+  scale_shape_manual(name="legend name", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2")) +
+  theme(legend.position = c(.9, .9))
 ```
 
 ![](README_files/figure-markdown_github/unnamed-chunk-1-1.png)
