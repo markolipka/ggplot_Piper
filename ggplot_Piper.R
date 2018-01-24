@@ -1,19 +1,11 @@
----
-title: "ggplot Piper Diagram"
-author: "Jason Lessels (jlessels@gmail.com)"
-date: "January 24, 2018"
-output: github_document
----
+### A piper diagram based on the ternary plot example here: http://srmulcahy.github.io/2012/12/04/ternary-plots-r.html
+### This was written quickly, and most likely contains bugs - I advise you to check it first.
+### Jason Lessels jlessels@gmail.com
 
-A piper diagram based on the ternary plot example here: http://srmulcahy.github.io/2012/12/04/ternary-plots-r.html.
-(Link returns 404, *Note from Marko, Jan 2018*)
-This was written quickly, and most likely contains bugs - I advise you to check it first.
+### This now consists of two functions. transform_piper_data transforms the data to match 
+### the coordinates of the piper diagram. ggplot_piper does all of the background.
 
-This now consists of two functions. *transform_piper_data()* transforms the data to match the coordinates of the piper diagram. *ggplot_piper()* does all of the background.
 
-# Code
-
-```{r functions}
 transform_piper_data <- function(Mg, Ca, Cl,SO4, name=NULL){
   if(is.null(name)){
     name = rep(1:length(Mg),3)
@@ -80,7 +72,7 @@ ggplot_piper <- function() {
     geom_segment(aes(x=x1, y=y1, yend=y2, xend=x2), data=grid3p2, linetype = "dashed", size = 0.25, colour = "grey50") +
     ### Labels and grid values
     #geom_text(aes(50,-10, label="Ca^2"), parse=T, size=4) + # Commented out, as parse=TRUE can cause issues
-
+    
     geom_text(aes(c(20,40,60,80),c(-5,-5,-5,-5), label=c(80, 60, 40, 20)), size=3) +
     geom_text(aes(c(35,25,15,5),grid1p2$y2, label=c(80, 60, 40, 20)), size=3) +
     geom_text(aes(c(95,85,75,65),grid1p3$y2, label=c(80, 60, 40, 20)), size=3) +
@@ -88,7 +80,7 @@ ggplot_piper <- function() {
     coord_equal(ratio=1)+  
     geom_text(aes(17,50, label="Mg^2"), angle=60, size=4, parse=TRUE) +  
     geom_text(aes(82.5,50, label="Na + K"), angle=-60, size=4) +
-   geom_text(aes(50,-10, label="Ca^2"), size=4, parse=TRUE) +
+    geom_text(aes(50,-10, label="Ca^2"), size=4, parse=TRUE) +
     
     
     geom_text(aes(170,-10, label="Cl^-phantom()"), size=4, parse=TRUE) +
@@ -96,7 +88,7 @@ ggplot_piper <- function() {
     geom_text(aes(137.5,50, label="Alkalinity~as~HCO^3"), angle=60, size=4, parse=TRUE) +
     geom_text(aes(72.5,150, label="SO^4~+~Cl^-phantom()"), angle=60, size=4, parse=TRUE) +
     geom_text(aes(147.5,150, label="Ca^2~+~Mg^2"), angle=-60, size=4, parse=TRUE) + 
-
+    
     geom_text(aes(c(155,145,135,125),grid2p2$y2, label=c(20, 40, 60, 80)), size=3) +
     geom_text(aes(c(215,205,195,185),grid2p3$y2, label=c(20, 40, 60, 80)), size=3) +
     geom_text(aes(c(140,160,180,200),c(-5,-5,-5,-5), label=c(20, 40, 60, 80)), size=3) +
@@ -111,73 +103,3 @@ ggplot_piper <- function() {
           axis.title.x = element_blank(), axis.title.y = element_blank())
   return(p)
 }
-```
-
-# Example
-
-## Data input
-
-```{r data}
-data <- as.data.frame(list("Ca"  = c(43, 10, 73, 26, 32),
-                        "Mg"  = c(30, 50, 3, 14, 12),
-                        "Cl"  = c(24, 10, 12, 30, 43),
-                        "SO4" = c(24, 10, 12, 30, 43),
-                        "WaterType" = c(2, 2, 1, 2, 3)),
-                   row.names = c("A", "B", "C", "D", "E"))
-data
-```
-
-## Transformation
-
-```{r transformed}
-piper_data <- transform_piper_data(Ca = data$Ca,
-                                   Mg = data$Mg,
-                                   Cl = data$Cl,
-                                   SO4 = data$SO4,
-                                   name = data$WaterType)
-
-piper_data
-```
-
-## Plot
-
-The piper function now just plots the background
-
-```{r basePlot, fig.width=10, fig.asp=1}
-ggplot_piper()
-```
-
-Now points can be added like...
-
-```{r withPoints, fig.width=10, fig.asp=1}
-ggplot_piper() + geom_point(aes(x,y), data=piper_data)
-```
-
-... colouring the points can be done using the observation value
-
-```{r withColouredPoints, fig.width=10, fig.asp=1}
-ggplot_piper() + geom_point(aes(x,y, colour=factor(observation)), data=piper_data)
-```
-
-The size can be changed like..
-
-```{r withColouredResizedPoints, fig.width=10, fig.asp=1}
-ggplot_piper() + geom_point(aes(x,y, colour=factor(observation)), size=4, data=piper_data)
-```
-
-Advanced example:
-
-```{r advanced, fig.width=10, fig.asp=1}
-ggplot_piper() + 
-  geom_point(aes(x, y,
-                 colour = factor(observation),
-                 shape  = factor(observation)), 
-             size=4, data = piper_data) + 
-  scale_colour_manual(name="legend name must be the same", values=c("#999999", "#E69F00", "#56B4E9"), labels=c("Control", "Treatment 1", "Treatment 2")) +
-  scale_shape_manual(name="legend name must be the same", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2")) +
-  theme(legend.position = c(.8, .9))
-```
-
-
-
-

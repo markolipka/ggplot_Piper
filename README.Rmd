@@ -1,0 +1,89 @@
+---
+title: "ggplot Piper Diagram"
+date: "January 24, 2018"
+output: github_document
+---
+**This is a fork of the gist 
+https://gist.github.com/markolipka/110260338490d26f8e911ff9a8cc1aea (by Jason Lessels, jlessels@gmail.com).**
+Forking a gist into a git-repository unfortunatenly does not preserve the relation to the forked project, sorry for that.
+
+Jasons comments:
+
+A piper diagram based on the ternary plot example here: http://srmulcahy.github.io/2012/12/04/ternary-plots-r.html.
+(this link is broken, *Note from Marko, Jan 2018*)
+This was written quickly, and most likely contains bugs - I advise you to check it first.
+
+This now consists of two functions. *transform_piper_data()* transforms the data to match the coordinates of the piper diagram. *ggplot_piper()* does all of the background.
+
+
+# Example
+```{r}
+source("ggplot_Piper.R")
+```
+
+## Data input
+
+```{r data}
+data <- as.data.frame(list("Ca"  = c(43, 10, 73, 26, 32),
+                        "Mg"  = c(30, 50, 3, 14, 12),
+                        "Cl"  = c(24, 10, 12, 30, 43),
+                        "SO4" = c(24, 10, 12, 30, 43),
+                        "WaterType" = c(2, 2, 1, 2, 3)),
+                   row.names = c("A", "B", "C", "D", "E"))
+data
+```
+
+## Transformation
+
+```{r transformed}
+piper_data <- transform_piper_data(Ca = data$Ca,
+                                   Mg = data$Mg,
+                                   Cl = data$Cl,
+                                   SO4 = data$SO4,
+                                   name = data$WaterType)
+
+piper_data
+```
+
+## Plot
+
+The piper function now just plots the background
+
+```{r basePlot, fig.width=10, fig.asp=1}
+ggplot_piper()
+```
+
+Now points can be added like...
+
+```{r withPoints, fig.width=10, fig.asp=1}
+ggplot_piper() + geom_point(aes(x,y), data=piper_data)
+```
+
+... colouring the points can be done using the observation value
+
+```{r withColouredPoints, fig.width=10, fig.asp=1}
+ggplot_piper() + geom_point(aes(x,y, colour=factor(observation)), data=piper_data)
+```
+
+The size can be changed like..
+
+```{r withColouredResizedPoints, fig.width=10, fig.asp=1}
+ggplot_piper() + geom_point(aes(x,y, colour=factor(observation)), size=4, data=piper_data)
+```
+
+Advanced example:
+
+```{r advanced, fig.width=10, fig.asp=1}
+ggplot_piper() + 
+  geom_point(aes(x, y,
+                 colour = factor(observation),
+                 shape  = factor(observation)), 
+             size=4, data = piper_data) + 
+  scale_colour_manual(name="legend name must be the same", values=c("#999999", "#E69F00", "#56B4E9"), labels=c("Control", "Treatment 1", "Treatment 2")) +
+  scale_shape_manual(name="legend name must be the same", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2")) +
+  theme(legend.position = c(.8, .9))
+```
+
+
+
+
