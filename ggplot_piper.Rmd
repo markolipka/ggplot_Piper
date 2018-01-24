@@ -1,11 +1,19 @@
-### A piper diagram based on the ternary plot example here: http://srmulcahy.github.io/2012/12/04/ternary-plots-r.html
-### This was written quickly, and most likely contains bugs - I advise you to check it first.
-### Jason Lessels jlessels@gmail.com
+---
+title: "ggplot Piper Diagram"
+author: "Jason Lessels (jlessels@gmail.com)"
+date: "January 24, 2018"
+output: github_document
+---
 
-### This now consists of two functions. transform_piper_data transforms the data to match 
-### the coordinates of the piper diagram. ggplot_piper does all of the background.
+A piper diagram based on the ternary plot example here: http://srmulcahy.github.io/2012/12/04/ternary-plots-r.html.
+(Link returns 404, *Note from Marko, Jan 2018*)
+This was written quickly, and most likely contains bugs - I advise you to check it first.
 
+This now consists of two functions. *transform_piper_data()* transforms the data to match the coordinates of the piper diagram. *ggplot_piper()* does all of the background.
 
+# Code
+
+```{r functions}
 transform_piper_data <- function(Mg, Ca, Cl,SO4, name=NULL){
   if(is.null(name)){
     name = rep(1:length(Mg),3)
@@ -103,19 +111,73 @@ ggplot_piper <- function() {
           axis.title.x = element_blank(), axis.title.y = element_blank())
   return(p)
 }
-### A plan and simple piper diagram
-data=as.data.frame(list("Ca"=c(43,10,73,26,32),"Mg"=c(30,50,3,14,12),Cl=c(24,10,12,30,43),"SO4"=c(24,10,12,30,43),"WaterType"=c(2,2,1,2,3)),row.names=c("A","B","C","D","E"))
-#transform the data into piper based coordinates
-piper_data <- transform_piper_data(Ca=data$Ca, Mg = data$Mg, Cl=data$Cl, SO4= data$SO4, name=data$WaterType)
-# The piper function now just plots the background
+```
+
+# Example
+
+## Data input
+
+```{r data}
+data <- as.data.frame(list("Ca"  = c(43, 10, 73, 26, 32),
+                        "Mg"  = c(30, 50, 3, 14, 12),
+                        "Cl"  = c(24, 10, 12, 30, 43),
+                        "SO4" = c(24, 10, 12, 30, 43),
+                        "WaterType" = c(2, 2, 1, 2, 3)),
+                   row.names = c("A", "B", "C", "D", "E"))
+data
+```
+
+## Transformation
+
+```{r transformed}
+piper_data <- transform_piper_data(Ca = data$Ca,
+                                   Mg = data$Mg,
+                                   Cl = data$Cl,
+                                   SO4 = data$SO4,
+                                   name = data$WaterType)
+
+piper_data
+```
+
+## Plot
+
+The piper function now just plots the background
+
+```{r basePlot, fig.width=10, fig.asp=1}
 ggplot_piper()
-# Now points can be added like...
+```
+
+Now points can be added like...
+
+```{r withPoints, fig.width=10, fig.asp=1}
 ggplot_piper() + geom_point(aes(x,y), data=piper_data)
-# colouring the points can be done using the observation value.
+```
+
+... colouring the points can be done using the observation value
+
+```{r withColouredPoints, fig.width=10, fig.asp=1}
 ggplot_piper() + geom_point(aes(x,y, colour=factor(observation)), data=piper_data)
-# The size can be changed like..
+```
+
+The size can be changed like..
+
+```{r withColouredResizedPoints, fig.width=10, fig.asp=1}
 ggplot_piper() + geom_point(aes(x,y, colour=factor(observation)), size=4, data=piper_data)
-## Change colours and shapes and merging the legends together
-ggplot_piper() + geom_point(aes(x,y, colour=factor(observation), shape=factor(observation)), size=4, data=piper_data) + 
+```
+
+Advanced example:
+
+```{r advanced, fig.width=10, fig.asp=1}
+ggplot_piper() + 
+  geom_point(aes(x, y,
+                 colour = factor(observation),
+                 shape  = factor(observation)), 
+             size=4, data = piper_data) + 
   scale_colour_manual(name="legend name must be the same", values=c("#999999", "#E69F00", "#56B4E9"), labels=c("Control", "Treatment 1", "Treatment 2")) +
-  scale_shape_manual(name="legend name must be the same", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2"))
+  scale_shape_manual(name="legend name must be the same", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2")) +
+  theme(legend.position = c(.8, .9))
+```
+
+
+
+
