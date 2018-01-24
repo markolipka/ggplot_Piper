@@ -10,25 +10,32 @@ A piper diagram based on the ternary plot example here: <http://srmulcahy.github
 
 This now consists of two functions. *transform\_piper\_data()* transforms the data to match the coordinates of the piper diagram. *ggplot\_piper()* does all of the background.
 
-Example
-=======
-
 ``` r
 source("ggplot_Piper.R")
 library("hydrogeo")
 ```
 
+Example
+=======
+
 Data input
 ----------
 
-Input data need to be percent of meq/l!
+Input data need to be percent of meq/L !
+*meq/L = mmol/L \* valence* ([Wikipedia: Equivalent (chemistry)](https://en.wikipedia.org/wiki/Equivalent_(chemistry))) with
 
 | element | valence |
 |---------|---------|
 | Ca      | 2       |
 | Mg      | 2       |
+| Na      | 1       |
+| K       | 1       |
 | Cl      | 1       |
 | SO4     | 2       |
+| CO3     | 2       |
+| HCO3    | 1       |
+
+### Example data
 
 ``` r
 milliequivalents <- list(Ca   = c(43, 10, 73, 26, 32),
@@ -60,6 +67,25 @@ data
     ## 3 25.000000         1   C
     ## 4  3.225806         2   D
     ## 5  3.007519         3   E
+
+### Check...
+
+... should add up to 100%
+
+``` r
+cation.sums <- apply(data[, c("Ca", "Mg", "Na", "K")], 1, FUN = sum)
+anion.sums  <- apply(data[, c("Cl", "SO4", "CO3", "HCO3")], 1, FUN = sum)
+
+cation.sums
+```
+
+    ## [1] 100 100 100 100 100
+
+``` r
+anion.sums
+```
+
+    ## [1] 100 100 100 100 100
 
 Transformation
 --------------
