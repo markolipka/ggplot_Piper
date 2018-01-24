@@ -5,7 +5,7 @@ output: github_document
 ---
 **This is a fork of the gist 
 https://gist.github.com/johnDorian/5561272 (by Jason Lessels, jlessels@gmail.com).**
-Forking a gist into a git-repository unfortunatenly does not preserve the relation to the forked project, sorry for that.
+Forking a gist into a git-repository unfortunately does not preserve the relation to the forked project, sorry for that.
 
 Jasons comments:
 
@@ -19,27 +19,45 @@ This now consists of two functions. *transform_piper_data()* transforms the data
 # Example
 ```{r}
 source("ggplot_Piper.R")
+library("hydrogeo")
 ```
 
 ## Data input
 
+Input data need to be percent of meq/l!
+
+element | valence
+--------|--------
+Ca      | 2
+Mg      | 2
+Cl      | 1
+SO4     | 2
+
 ```{r data}
-data <- as.data.frame(list("Ca"  = c(43, 10, 73, 26, 32),
-                        "Mg"  = c(30, 50, 3, 14, 12),
-                        "Cl"  = c(24, 10, 12, 30, 43),
-                        "SO4" = c(24, 10, 12, 30, 43),
-                        "WaterType" = c(2, 2, 1, 2, 3)),
-                   row.names = c("A", "B", "C", "D", "E"))
+milliequivalents <- list(Ca   = c(43, 10, 73, 26, 32),
+                         Mg   = c(30, 50, 83, 14, 62),
+                         Na   = c(54, 76, 3, 14, 12),
+                         K    = c(31, 22, 32, 22, 11),
+                         Cl   = c(24, 10, 12, 30, 43),
+                         SO4  = c(24, 10, 12, 30, 43),
+                         CO3  = c(24, 10, 12, 30, 43),
+                         HCO3 = c(42, 110, 12, 3, 4),
+                         "WaterType" = c(2, 2, 1, 2, 3),
+                         IDs = c("A","B","C","D","E") )
+percents <- toPercent(milliequivalents)
+
+data <- as.data.frame(percents)
+
 data
 ```
 
 ## Transformation
 
 ```{r transformed}
-piper_data <- transform_piper_data(Ca = data$Ca,
-                                   Mg = data$Mg,
-                                   Cl = data$Cl,
-                                   SO4 = data$SO4,
+piper_data <- transform_piper_data(Ca   = data$Ca,
+                                   Mg   = data$Mg,
+                                   Cl   = data$Cl,
+                                   SO4  = data$SO4,
                                    name = data$WaterType)
 
 piper_data
