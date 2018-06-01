@@ -78,11 +78,11 @@ piper_data <- transform_piper_data(Ca   = data$Ca,
                                    Mg   = data$Mg,
                                    Cl   = data$Cl,
                                    SO4  = data$SO4,
-                                   name = data$WaterType)
-piper_data <- merge(piper_data,
-                    data[, c("WaterType", "SecondFactor", "IDs")],
-                    by.y = "WaterType",
-                    by.x = "observation")
+                                   name = data$IDs)
+ piper_data <- merge(piper_data,
+                     data[, c("WaterType", "SecondFactor", "IDs")],
+                     by.y = "IDs",
+                     by.x = "observation")
 
 piper_data
 ```
@@ -117,7 +117,7 @@ Grouping by multiple factors:
 
 ```{r multiple groups, fig.width=10, fig.asp=1}
 ggplot_piper() + geom_point(aes(x,y,
-                                color = IDs,
+                                color = factor(WaterType),
                                 shape = SecondFactor),
                             size = 4, stroke = 2, data = piper_data) +
   scale_shape_manual(values = c(21:26)) +
@@ -129,11 +129,13 @@ Advanced example:
 ```{r advanced, fig.width=10, fig.asp=1}
 ggplot_piper() + 
   geom_point(aes(x, y,
-                 colour = factor(observation),
-                 shape  = factor(observation)), 
+                 colour = factor(WaterType),
+                 shape  = factor(WaterType)), 
              size=4, data = piper_data) + 
-  scale_colour_manual(name="legend name must be the same", values=c("#999999", "#E69F00", "#56B4E9"), labels=c("Control", "Treatment 1", "Treatment 2")) +
-  scale_shape_manual(name="legend name must be the same", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2")) +
+  scale_colour_manual(name="legend name must be the same",
+                      values=c("#999999", "#E69F00", "#56B4E9"),
+                      labels=c("Control", "Treatment 1", "Treatment 2")) +
+  scale_shape_manual(name="legend name must be the same", values=c(1, 2, 3, 4 ,5), labels=c("Control", "Treatment 1", "Treatment 2")) +
   theme(legend.position = c(.8, .9))
 ```
 

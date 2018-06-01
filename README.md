@@ -96,49 +96,31 @@ piper_data <- transform_piper_data(Ca   = data$Ca,
                                    Mg   = data$Mg,
                                    Cl   = data$Cl,
                                    SO4  = data$SO4,
-                                   name = data$WaterType)
-piper_data <- merge(piper_data,
-                    data[, c("WaterType", "SecondFactor", "IDs")],
-                    by.y = "WaterType",
-                    by.x = "observation")
+                                   name = data$IDs)
+ piper_data <- merge(piper_data,
+                     data[, c("WaterType", "SecondFactor", "IDs")],
+                     by.y = "IDs",
+                     by.x = "observation")
 
 piper_data
 ```
 
-    ##    observation         x          y SecondFactor IDs
-    ## 1            1  94.16230 131.355440         high   C
-    ## 2            1  40.05236  37.633764         high   C
-    ## 3            1 157.50000  21.650750         high   C
-    ## 4            2  63.29114  16.443608          low   A
-    ## 5            2  63.29114  16.443608          low   B
-    ## 6            2  63.29114  16.443608         high   D
-    ## 7            2  77.84810  27.406013          low   A
-    ## 8            2  77.84810  27.406013          low   B
-    ## 9            2  77.84810  27.406013         high   D
-    ## 10           2 130.71429   6.185929          low   A
-    ## 11           2 130.71429   6.185929          low   B
-    ## 12           2 130.71429   6.185929         high   D
-    ## 13           2  56.57895  15.953184          low   A
-    ## 14           2  56.57895  15.953184          low   B
-    ## 15           2  56.57895  15.953184         high   D
-    ## 16           2 168.38710  27.936452          low   A
-    ## 17           2 168.38710  27.936452          low   B
-    ## 18           2 168.38710  27.936452         high   D
-    ## 19           2 151.57895  18.232211          low   A
-    ## 20           2 151.57895  18.232211          low   B
-    ## 21           2 151.57895  18.232211         high   D
-    ## 22           2 107.95137  93.797800          low   A
-    ## 23           2 107.95137  93.797800          low   B
-    ## 24           2 107.95137  93.797800         high   D
-    ## 25           2  98.15552  62.579672          low   A
-    ## 26           2  98.15552  62.579672          low   B
-    ## 27           2  98.15552  62.579672         high   D
-    ## 28           2 115.94228 118.774030          low   A
-    ## 29           2 115.94228 118.774030          low   B
-    ## 30           2 115.94228 118.774030         high   D
-    ## 31           3  46.15385  45.892188         high   E
-    ## 32           3 168.49624  27.999466         high   E
-    ## 33           3 102.15989 142.898011         high   E
+    ##    observation         x          y WaterType SecondFactor
+    ## 1            A  63.29114  16.443608         2          low
+    ## 2            A 151.57895  18.232211         2          low
+    ## 3            A 107.95137  93.797800         2          low
+    ## 4            B  98.15552  62.579672         2          low
+    ## 5            B  77.84810  27.406013         2          low
+    ## 6            B 130.71429   6.185929         2          low
+    ## 7            C  94.16230 131.355440         1         high
+    ## 8            C 157.50000  21.650750         1         high
+    ## 9            C  40.05236  37.633764         1         high
+    ## 10           D 168.38710  27.936452         2         high
+    ## 11           D 115.94228 118.774030         2         high
+    ## 12           D  56.57895  15.953184         2         high
+    ## 13           E  46.15385  45.892188         3         high
+    ## 14           E 168.49624  27.999466         3         high
+    ## 15           E 102.15989 142.898011         3         high
 
 Plot
 ----
@@ -179,7 +161,7 @@ Grouping by multiple factors:
 
 ``` r
 ggplot_piper() + geom_point(aes(x,y,
-                                color = IDs,
+                                color = factor(WaterType),
                                 shape = SecondFactor),
                             size = 4, stroke = 2, data = piper_data) +
   scale_shape_manual(values = c(21:26)) +
@@ -193,11 +175,13 @@ Advanced example:
 ``` r
 ggplot_piper() + 
   geom_point(aes(x, y,
-                 colour = factor(observation),
-                 shape  = factor(observation)), 
+                 colour = factor(WaterType),
+                 shape  = factor(WaterType)), 
              size=4, data = piper_data) + 
-  scale_colour_manual(name="legend name must be the same", values=c("#999999", "#E69F00", "#56B4E9"), labels=c("Control", "Treatment 1", "Treatment 2")) +
-  scale_shape_manual(name="legend name must be the same", values=c(1,2,3), labels=c("Control", "Treatment 1", "Treatment 2")) +
+  scale_colour_manual(name="legend name must be the same",
+                      values=c("#999999", "#E69F00", "#56B4E9"),
+                      labels=c("Control", "Treatment 1", "Treatment 2")) +
+  scale_shape_manual(name="legend name must be the same", values=c(1, 2, 3, 4 ,5), labels=c("Control", "Treatment 1", "Treatment 2")) +
   theme(legend.position = c(.8, .9))
 ```
 
