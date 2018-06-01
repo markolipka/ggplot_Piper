@@ -50,6 +50,7 @@ milliequivalents <- list(Ca   = c(43, 10, 73, 26, 32),
                          CO3  = c(24, 10, 12, 30, 43),
                          HCO3 = c(42, 110, 12, 3, 4),
                          "WaterType" = c(2, 2, 1, 2, 3),
+                         "SecondFactor" = c("low", "low", "high", "high", "high"),
                          IDs = c("A","B","C","D","E") )
 percents <- toPercent(milliequivalents)
 
@@ -78,6 +79,10 @@ piper_data <- transform_piper_data(Ca   = data$Ca,
                                    Cl   = data$Cl,
                                    SO4  = data$SO4,
                                    name = data$WaterType)
+piper_data <- merge(piper_data,
+                    data[, c("WaterType", "SecondFactor", "IDs")],
+                    by.y = "WaterType",
+                    by.x = "observation")
 
 piper_data
 ```
@@ -106,6 +111,17 @@ The size can be changed like..
 
 ```{r withColouredResizedPoints, fig.width=10, fig.asp=1}
 ggplot_piper() + geom_point(aes(x,y, colour=factor(observation)), size=4, data=piper_data)
+```
+
+Grouping by multiple factors:
+
+```{r multiple groups, fig.width=10, fig.asp=1}
+ggplot_piper() + geom_point(aes(x,y,
+                                color = IDs,
+                                shape = SecondFactor),
+                            size = 4, stroke = 2, data = piper_data) +
+  scale_shape_manual(values = c(21:26)) +
+  theme(legend.position = "top", legend.text = element_text(color = "red", size = 20))
 ```
 
 Advanced example:

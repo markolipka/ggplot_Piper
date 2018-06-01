@@ -47,6 +47,7 @@ milliequivalents <- list(Ca   = c(43, 10, 73, 26, 32),
                          CO3  = c(24, 10, 12, 30, 43),
                          HCO3 = c(42, 110, 12, 3, 4),
                          "WaterType" = c(2, 2, 1, 2, 3),
+                         "SecondFactor" = c("low", "low", "high", "high", "high"),
                          IDs = c("A","B","C","D","E") )
 percents <- toPercent(milliequivalents)
 
@@ -61,12 +62,12 @@ data
     ## 3 38.219895 43.45550  1.570681 16.753927 25.000000 25.000000 25.000000
     ## 4 34.210526 18.42105 18.421053 28.947368 32.258065 32.258065 32.258065
     ## 5 27.350427 52.99145 10.256410  9.401709 32.330827 32.330827 32.330827
-    ##        HCO3 WaterType IDs
-    ## 1 36.842105         2   A
-    ## 2 78.571429         2   B
-    ## 3 25.000000         1   C
-    ## 4  3.225806         2   D
-    ## 5  3.007519         3   E
+    ##        HCO3 WaterType SecondFactor IDs
+    ## 1 36.842105         2          low   A
+    ## 2 78.571429         2          low   B
+    ## 3 25.000000         1         high   C
+    ## 4  3.225806         2         high   D
+    ## 5  3.007519         3         high   E
 
 ### Check...
 
@@ -96,26 +97,48 @@ piper_data <- transform_piper_data(Ca   = data$Ca,
                                    Cl   = data$Cl,
                                    SO4  = data$SO4,
                                    name = data$WaterType)
+piper_data <- merge(piper_data,
+                    data[, c("WaterType", "SecondFactor", "IDs")],
+                    by.y = "WaterType",
+                    by.x = "observation")
 
 piper_data
 ```
 
-    ##    observation         x          y
-    ## 1            2  63.29114  16.443608
-    ## 2            2  77.84810  27.406013
-    ## 3            1  40.05236  37.633764
-    ## 4            2  56.57895  15.953184
-    ## 5            3  46.15385  45.892188
-    ## 6            2 151.57895  18.232211
-    ## 7            2 130.71429   6.185929
-    ## 8            1 157.50000  21.650750
-    ## 9            2 168.38710  27.936452
-    ## 10           3 168.49624  27.999466
-    ## 11           2 107.95137  93.797800
-    ## 12           2  98.15552  62.579672
-    ## 13           1  94.16230 131.355440
-    ## 14           2 115.94228 118.774030
-    ## 15           3 102.15989 142.898011
+    ##    observation         x          y SecondFactor IDs
+    ## 1            1  94.16230 131.355440         high   C
+    ## 2            1  40.05236  37.633764         high   C
+    ## 3            1 157.50000  21.650750         high   C
+    ## 4            2  63.29114  16.443608          low   A
+    ## 5            2  63.29114  16.443608          low   B
+    ## 6            2  63.29114  16.443608         high   D
+    ## 7            2  77.84810  27.406013          low   A
+    ## 8            2  77.84810  27.406013          low   B
+    ## 9            2  77.84810  27.406013         high   D
+    ## 10           2 130.71429   6.185929          low   A
+    ## 11           2 130.71429   6.185929          low   B
+    ## 12           2 130.71429   6.185929         high   D
+    ## 13           2  56.57895  15.953184          low   A
+    ## 14           2  56.57895  15.953184          low   B
+    ## 15           2  56.57895  15.953184         high   D
+    ## 16           2 168.38710  27.936452          low   A
+    ## 17           2 168.38710  27.936452          low   B
+    ## 18           2 168.38710  27.936452         high   D
+    ## 19           2 151.57895  18.232211          low   A
+    ## 20           2 151.57895  18.232211          low   B
+    ## 21           2 151.57895  18.232211         high   D
+    ## 22           2 107.95137  93.797800          low   A
+    ## 23           2 107.95137  93.797800          low   B
+    ## 24           2 107.95137  93.797800         high   D
+    ## 25           2  98.15552  62.579672          low   A
+    ## 26           2  98.15552  62.579672          low   B
+    ## 27           2  98.15552  62.579672         high   D
+    ## 28           2 115.94228 118.774030          low   A
+    ## 29           2 115.94228 118.774030          low   B
+    ## 30           2 115.94228 118.774030         high   D
+    ## 31           3  46.15385  45.892188         high   E
+    ## 32           3 168.49624  27.999466         high   E
+    ## 33           3 102.15989 142.898011         high   E
 
 Plot
 ----
@@ -151,6 +174,19 @@ ggplot_piper() + geom_point(aes(x,y, colour=factor(observation)), size=4, data=p
 ```
 
 ![](README_files/figure-markdown_github/withColouredResizedPoints-1.png)
+
+Grouping by multiple factors:
+
+``` r
+ggplot_piper() + geom_point(aes(x,y,
+                                color = IDs,
+                                shape = SecondFactor),
+                            size = 4, stroke = 2, data = piper_data) +
+  scale_shape_manual(values = c(21:26)) +
+  theme(legend.position = "top", legend.text = element_text(color = "red", size = 20))
+```
+
+![](README_files/figure-markdown_github/multiple%20groups-1.png)
 
 Advanced example:
 
