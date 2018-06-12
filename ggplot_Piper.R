@@ -62,6 +62,8 @@ ggplot_piper <- function() {
                          x2 = c(120, 130, 140, 150),
                          y2 = c(34.6412, 51.9618, 69.2824, 86.603)) ## FIXME: how are these numbers generated???
   
+  label.size <- 5
+  
   p <- ggplot() +
     
     ## left hand ternary plot
@@ -91,27 +93,25 @@ ggplot_piper <- function() {
     geom_segment(aes(x = x1, y = y1, yend = y2, xend = x2), data = grid3p2, linetype = "dashed", size = 0.25, colour = "grey50") +
     
     ### Labels and grid values
-    coord_equal(ratio = 1) +  
-    geom_text(aes(17,   50, label = "Mg^'2+'"), angle = 60, size = 4, parse = TRUE) +  
-    geom_text(aes(82.5, 50, label = "Na^'+'~+~K^'+'"), angle = -60, size = 4, parse = T) +
-    geom_text(aes(50,  -10, label = "Ca^'2+'"), size = 4, parse=TRUE) +
+    coord_fixed(ratio = 1) +  
+    geom_text(aes(17,   50, label = "Mg^'2+'"), angle = 60, size = label.size, parse = TRUE) +  
+    geom_text(aes(82.5, 50, label = "Na^'+'~+~K^'+'"), angle = -60, size = label.size, parse = T) +
+    geom_text(aes(50,  -10, label = "Ca^'2+'"), size = label.size, parse = TRUE) +
+    geom_text(aes(170,   -10, label = "Cl^'-'"), size = label.size, parse = TRUE) +
+    geom_text(aes(205,    50, label = "SO[4]^'2-'"), angle = -60, size = label.size, parse = TRUE) +
+    geom_text(aes(137.5,  50, label = "Alkalinity~as~HCO[3]^'-'"), angle = 60, size = label.size, parse = TRUE) +
+    geom_text(aes( 72.5, 150, label = "SO[4]^'2-'~+~Cl^'-'"), angle = 60, size = label.size, parse = TRUE) +
+    geom_text(aes(147.5, 150, label = "Ca^'2+'~+~Mg^'2+'"), angle = -60, size = label.size, parse = TRUE) + 
     
-    
-    geom_text(aes(170,   -10, label = "Cl^'-'"), size = 4, parse = TRUE) +
-    geom_text(aes(205,    50, label = "SO[4]^'2-'"), angle = -60, size = 4, parse = TRUE) +
-    geom_text(aes(137.5,  50, label = "Alkalinity~as~HCO[3]^'-'"), angle = 60, size = 4, parse = TRUE) +
-    geom_text(aes( 72.5, 150, label = "SO[4]^'2-'~+~Cl^'-'"), angle = 60, size = 4, parse = TRUE) +
-    geom_text(aes(147.5, 150, label = "Ca^'2+'~+~Mg^'2+'"), angle = -60, size = 4, parse = TRUE) + 
-    
-    geom_text(aes(c(35, 25, 15, 5), grid1p2$y2, label = c(80, 60, 40, 20)), size=3, angle = 0) + # Mg axis
-    geom_text(aes(c(95, 85, 75, 65), grid1p3$y2, label = c(80, 60, 40, 20)), size=3, angle = 60, vjust = -1.5, hjust = 0) + # Na axis
-    geom_text(aes(c(20, 40, 60, 80), c(-5, -5, -5, -5), label = c(80, 60, 40, 20)), size = 3, angle = -60, vjust = -.75) + # Ca axis
-    geom_text(aes(c(155, 145, 135, 125), grid2p2$y2, label = c(20, 40, 60, 80)), size = 3, angle = -60, vjust = -1.5, hjust = 1) + # HCO3 axis
-    geom_text(aes(c(215, 205, 195, 185), grid2p3$y2, label = c(20, 40, 60, 80)), size = 3, angle = 0) + # SO4 axis
-    geom_text(aes(c(140, 160, 180, 200), c(-5, -5, -5, -5), label = c(20, 40, 60, 80)), size = 3, angle = 60, vjust = -.75) + # Cl axis
+    geom_text(aes(c(35, 25, 15, 5), grid1p2$y2, label = c(80, 60, 40, 20)), size = label.size -1, angle = 0) + # Mg axis
+    geom_text(aes(c(95, 85, 75, 65), grid1p3$y2, label = c(80, 60, 40, 20)), size = label.size -1, angle = 60, vjust = -1, hjust = 0) + # Na axis
+    geom_text(aes(c(20, 40, 60, 80), c(-5, -5, -5, -5), label = c(80, 60, 40, 20)), size = label.size -1, angle = -60, vjust = -.5) + # Ca axis
+    geom_text(aes(c(155, 145, 135, 125), grid2p2$y2, label = c(20, 40, 60, 80)), size = label.size -1, angle = -60, vjust = -1, hjust = 1) + # HCO3 axis
+    geom_text(aes(c(215, 205, 195, 185), grid2p3$y2, label = c(20, 40, 60, 80)), size = label.size -1, angle = 0) + # SO4 axis
+    geom_text(aes(c(140, 160, 180, 200), c(-5, -5, -5, -5), label = c(20, 40, 60, 80)), size = label.size -1, angle = 60, vjust = -.5) + # Cl axis
     #geom_text(aes(grid3p1$x1 - 5, grid3p1$y1, label = c(80, 60, 40, 20)), size=3, angle = 60, vjust = -1.5, hjust = 1) + # diamond Na axis
-    geom_text(aes(grid3p1$x2 + 5, grid3p1$y2, label = c(20, 40, 60, 80)), size=3, angle =  60, vjust = -1.5, hjust = 0) + # diamond Ca axis
-    geom_text(aes(grid3p2$x1 - 5, grid3p2$y1, label = c(20, 40, 60, 80)), size=3, angle = -60, vjust = -1.5, hjust = 1) + # diamond SO4 axis
+    geom_text(aes(grid3p1$x2 + 5, grid3p1$y2, label = c(20, 40, 60, 80)), size = label.size -1, angle =  60, vjust = -1, hjust = 0) + # diamond Ca axis
+    geom_text(aes(grid3p2$x1 - 5, grid3p2$y1, label = c(20, 40, 60, 80)), size = label.size -1, angle = -60, vjust = -1, hjust = 1) + # diamond SO4 axis
     #geom_text(aes(grid3p2$x2 + 5, grid3p2$y2, label = c(80, 60, 40, 20)), size=3, angle =  90) + # diamond HCO3 axis
     theme_bw() +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),

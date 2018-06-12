@@ -6,9 +6,9 @@ January 24, 2018
 
 Jasons comments:
 
-A piper diagram based on the ternary plot example here: <http://srmulcahy.github.io/2012/12/04/ternary-plots-r.html>. (this link is broken, *Note from Marko, Jan 2018*) This was written quickly, and most likely contains bugs - I advise you to check it first.
+> A piper diagram based on the ternary plot example here: <http://srmulcahy.github.io/2012/12/04/ternary-plots-r.html>. *(this link is broken, Note from Marko, Jan 2018)*
 
-This now consists of two functions. *transform\_piper\_data()* transforms the data to match the coordinates of the piper diagram. *ggplot\_piper()* does all of the background.
+> This was written quickly, and most likely contains bugs - I advise you to check it first. This now consists of two functions. *transform\_piper\_data()* transforms the data to match the coordinates of the piper diagram. *ggplot\_piper()* does all of the background.
 
 ``` r
 source("ggplot_Piper.R")
